@@ -9,7 +9,7 @@ import {toast} from 'react-hot-toast'
 import {useRouter} from 'next/navigation'
 import {IoHome} from 'react-icons/io5'
 import {BiUser} from 'react-icons/bi'
-import Spinner from '../ui/Spinner'
+
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
@@ -62,7 +62,7 @@ export default function SiteHeader() {
                 <Link href="/" className="flex flex-shrink-0 items-center">
                   <IoHome className="block h-8 w-auto lg:hidden text-brand-blue-500" />
                   <IoHome className="hidden h-8 w-auto lg:block  text-brand-blue-500" />
-                  <h2 className="pl-2 text-2xl font-bold text-brand-blue-600">
+                  <h2 className="pl-2 text-2xl   text-brand-blue-500 font-bruno">
                     Swift Mend
                   </h2>
                 </Link>
@@ -100,7 +100,7 @@ export default function SiteHeader() {
                 >
                   <span className="sr-only">View notifications</span>
                   <BellIcon
-                    className="h-6 w-6 text-brand-blue-400"
+                    className="h-6 w-6 text-brand-gray-500"
                     aria-hidden="true"
                   />
                 </button>
@@ -110,7 +110,7 @@ export default function SiteHeader() {
                     <div>
                       <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue-600 focus:ring-offset-2">
                         <span className="sr-only">Open user menu</span>
-                        <BiUser className="w-6 h-6 text-brand-blue-400" />
+                        <BiUser className="w-6 h-6 text-brand-gray-500" />
                       </Menu.Button>
                     </div>
                     <Transition

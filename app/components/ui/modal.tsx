@@ -3,15 +3,67 @@ import {Fragment, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
 import {CheckIcon} from '@heroicons/react/24/outline'
 import {Input} from './input'
+import {z, ZodError} from 'zod'
+import clsx from 'clsx'
+import {account} from '@/app/lib/appWriteConfig'
+import {toast} from 'react-hot-toast'
+
+const schema = z.object({
+  name: z.string().nonempty('Name is required'),
+  phone: z.string().nonempty('Phone is required'),
+})
 
 interface UserProfieUpdateModalProps {
   setOpen: (isOpen: boolean) => void
   open: boolean
+  handleUpdateName: (updatedName: string) => void
 }
+
+type FormData = z.infer<typeof schema>
+
 export default function UserProfieUpdateModal({
   setOpen,
   open,
+  handleUpdateName,
 }: UserProfieUpdateModalProps) {
+  const [errors, setErrors] = useState<ZodError<FormData> | null>(null)
+  const [formData, setFormData] = useState<FormData>({name: '', phone: ''})
+
+  const handleClose = () => {
+    setOpen(false)
+    setErrors(null)
+    setFormData({name: '', phone: ''})
+  }
+
+  const handleSubmit = async () => {
+    try {
+      const validatedData = schema.parse(formData)
+
+      if (validatedData.name) {
+        try {
+          const response = await account.updateName(validatedData.name)
+          handleUpdateName(response.name)
+          toast.success(`Name changed to ${response.name}`)
+        } catch (error) {
+          console.log(error)
+          toast.error(
+            'Unable to update. Something went wrong! Please retry after some time.',
+          )
+        }
+      }
+
+      handleClose()
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        setErrors(error)
+      }
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = e.target
+    setFormData(prevData => ({...prevData, [name]: value}))
+  }
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -55,8 +107,8 @@ export default function UserProfieUpdateModal({
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Consequatur amet labore.
+                        Please take a moment to review and update your profile
+                        details to ensure they are accurate and up to date.
                       </p>
                     </div>
                   </div>
@@ -65,24 +117,67 @@ export default function UserProfieUpdateModal({
                   <Input
                     type="text"
                     placeholder="Name"
-                    className="w-full border-brand-blue-500 focus:border-brand-blue-500 focus:ring-brand-blue-500 rounded-md shadow-sm py-2 px-3"
+                    name="name"
+                    className={clsx(
+                      'w-full border-brand-blue-500 focus:border-brand-blue-500 focus:ring-brand-blue-500 rounded-md shadow-sm py-2 px-3',
+                      {
+                        'border-red-500 ring-red-500': errors?.issues?.find(
+                          issue => issue.path[0] === 'name',
+                        ),
+                      },
+                    )}
+                    value={formData.name}
+                    onChange={handleChange}
                   />
+                  {errors?.issues?.find(issue => issue.path[0] === 'name') && (
+                    <p className="mt-2 text-sm text-red-500">
+                      {
+                        errors.issues.find(issue => issue.path[0] === 'name')
+                          ?.message
+                      }
+                    </p>
+                  )}
                 </div>
 
                 <div className="mt-6">
                   <Input
                     type="text"
-                    placeholder="Email"
-                    className="w-full border-brand-blue-500 focus:border-brand-blue-500 focus:ring-brand-blue-500 rounded-md shadow-sm py-2 px-3"
+                    placeholder="Phone"
+                    name="phone"
+                    className={clsx(
+                      'w-full border-brand-blue-500 focus:border-brand-blue-500 focus:ring-brand-blue-500 rounded-md shadow-sm py-2 px-3',
+                      {
+                        'border-red-500 ring-red-500': errors?.issues?.find(
+                          issue => issue.path[0] === 'phone',
+                        ),
+                      },
+                    )}
+                    value={formData.phone}
+                    onChange={handleChange}
                   />
+                  {errors?.issues?.find(issue => issue.path[0] === 'phone') && (
+                    <p className="mt-2 text-sm text-red-500">
+                      {
+                        errors.issues.find(issue => issue.path[0] === 'phone')
+                          ?.message
+                      }
+                    </p>
+                  )}
                 </div>
-                <div className="mt-5 sm:mt-6">
+                <div className="mt-5 sm:mt-6 flex gap-4">
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-brand-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-brand-blue-700 focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:ring-offset-2 sm:text-sm"
-                    onClick={() => setOpen(false)}
+                    onClick={handleSubmit}
                   >
                     Update
+                  </button>
+                  <button
+                    type="button"
+                    className="inline-flex w-full justify-center rounded-md border border-transparent bg-brand-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-brand-red-700 focus:outline-none focus:ring-2 focus:ring-brand-red-500 focus:ring-offset-2 sm:text-sm"
+                    onClick={handleClose}
+                  >
+                    Cancel
                   </button>
                 </div>
               </Dialog.Panel>
