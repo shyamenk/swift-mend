@@ -2,6 +2,7 @@ import Footer from './components/Site/Footer'
 import SiteHeader from './components/Site/SiteHeader'
 import './globals.css'
 import {Toaster} from 'react-hot-toast'
+import {AuthProvider} from './hooks/useAuth'
 
 export const metadata = {
   title: 'Create Next App',
@@ -12,10 +13,12 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en">
       <body>
-        <SiteHeader />
-        {children}
-        <Toaster />
-        <Footer />
+        <AuthProvider>
+          <SiteHeader />
+          {children}
+          <Toaster />
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   )

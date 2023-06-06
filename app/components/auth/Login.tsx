@@ -2,60 +2,28 @@
 
 import Link from 'next/link'
 import React, {FormEvent, useState} from 'react'
-import {account} from '../../lib/appWriteConfig'
-import {ID} from 'appwrite'
-import {useRouter, useSearchParams} from 'next/navigation'
-import {toast} from 'react-hot-toast'
+import {useSearchParams} from 'next/navigation'
+import {useAuth} from '@/app/hooks/useAuth'
 
 const Login = () => {
   const [email, setEmail] = useState('')
-
   const searchParams = useSearchParams()
-  const router = useRouter()
+  const {googleSignIn, sendMagicLink, updateMagicVerification} = useAuth()
 
   const userId = searchParams.get('userId') || ''
   const secret = searchParams.get('secret') || ''
 
   React.useEffect(() => {
-    if (userId && secret) {
-      const promise = account.updateMagicURLSession(userId, secret)
-      promise
-        .then(function (response) {
-          console.log(response)
-          toast.success('Successfully Verified')
-          router.push('/')
-        })
-        .catch(function (error) {
-          console.log(error)
-          toast.error(error.message)
-        })
-    }
-  }, [userId, secret, router])
+    updateMagicVerification(userId, secret)
+  }, [userId, secret])
 
   const loginHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const promise = account.createMagicURLSession(
-      ID.unique(),
-      email,
-      'http://localhost:3000/login',
-    )
-    promise
-      .then(function (response) {
-        console.log(response)
-        toast.success('Please check your Inbox🚀')
-      })
-      .catch(function (error) {
-        console.log(error)
-        toast.error(error.message)
-      })
+    sendMagicLink(email)
   }
 
   const googleLoginHandler = () => {
-    account.createOAuth2Session(
-      'google',
-      'http://localhost:3000/',
-      'http://localhost:3000//login',
-    )
+    googleSignIn()
   }
 
   return (
@@ -76,12 +44,12 @@ const Login = () => {
               type="email"
               required
               value={email}
-              className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+              className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-brand-blue-600 shadow-sm rounded-lg"
             />
           </div>
           <button
             type="submit"
-            className="w-full mt-4 px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
+            className="w-full mt-4 px-4 py-2 text-white font-medium bg-brand-blue-600 hover:bg-brand-blue-500 active:bg-brand-blue-600 rounded-lg duration-150"
           >
             Sign in
           </button>
@@ -131,7 +99,10 @@ const Login = () => {
           </button>
         </div>
         <div className="text-center">
-          <Link href="#" className="text-indigo-600 hover:text-indigo-500">
+          <Link
+            href="#"
+            className="text-brand-blue-600 hover:text-brand-blue-500"
+          >
             Forgot password?
           </Link>
         </div>

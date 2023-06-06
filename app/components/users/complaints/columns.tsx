@@ -1,47 +1,71 @@
-'use client'
-
 import {ColumnDef} from '@tanstack/react-table'
-
-export type Payment = {
-  id: string
-  amount: number
-  status: 'pending' | 'processing' | 'success' | 'failed'
-  email: string
-}
+import {Payment} from '@/app/lib/data'
 
 export const columns: ColumnDef<Payment>[] = [
   {
-    accessorKey: 'email',
-    header: 'Email',
+    accessorKey: 'id',
+    header: 'ID',
+  },
+  {
+    accessorKey: 'title',
+    header: 'Title',
+  },
+  {
+    accessorKey: 'description',
+    header: 'Description',
+  },
+  {
+    accessorKey: 'category',
+    header: 'Category',
+  },
+  {
+    accessorKey: 'priority',
+    header: 'Priority',
   },
   {
     accessorKey: 'status',
-    header: 'Status',
-  },
-  {
-    accessorKey: 'hire',
-    header: 'Hiring',
-  },
-  {
-    accessorKey: 'department',
-    header: 'Department',
-  },
-  {
-    accessorKey: 'method',
-    header: 'Method',
-  },
-  {
-    accessorKey: 'amount',
-    // header: 'Amount',
-    header: () => <div className="text-right">Amount</div>,
+    header: () => <div className="text-center">Status</div>,
     cell: ({row}) => {
-      const amount = parseFloat(row.getValue('amount'))
-      const formatted = new Intl.NumberFormat('en-IN', {
-        style: 'currency',
-        currency: 'INR',
-      }).format(amount)
+      const status = String(row.getValue('status'))
+      let chipColor = ''
+      switch (status) {
+        case 'Pending':
+          chipColor = 'green'
+          break
+        case 'Processing':
+          chipColor = 'blue'
+          break
+        case 'Success':
+          chipColor = 'green'
+          break
+        case 'Failed':
+          chipColor = 'red'
+          break
+        default:
+          chipColor = 'gray'
+          break
+      }
 
-      return <div className="text-right font-medium">{formatted}</div>
+      return (
+        <div
+          className={` text-center rounded-full px-2 py-1 bg-${chipColor}-300 text-${chipColor}-800 !important`}
+        >
+          {status}
+        </div>
+      )
     },
   },
+  // {
+  //   accessorKey: 'amount',
+  //   header: () => <div className="text-right">Amount</div>,
+  //   cell: ({row}) => {
+  //     const amount = parseFloat(row.getValue('amount'))
+  //     const formatted = new Intl.NumberFormat('en-IN', {
+  //       style: 'currency',
+  //       currency: 'INR',
+  //     }).format(amount)
+
+  //     return <div className="text-right font-medium">{formatted}</div>
+  //   },
+  // },
 ]

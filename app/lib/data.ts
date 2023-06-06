@@ -1,46 +1,43 @@
-type Payment = {
+export type Payment = {
   id: string
-  amount: number
-  status: 'pending' | 'processing' | 'success' | 'failed'
-  email: string
+  title: string
+  description: string
+  category: string
+  priority: string
+  status: 'Pending' | 'Processing' | 'Success' | 'Failed'
 }
 
 export const payments: Payment[] = [
   {
     id: '728ed52f',
-    amount: 100,
-    status: 'pending',
-    email: 'm@example.com',
+    title: 'Power Outage in Apartment',
+    description: 'No electricity in the entire building',
+    category: 'Electricity',
+    priority: 'Low',
+    status: 'Pending',
   },
   {
     id: '489e1d42',
-    amount: 125,
-    status: 'processing',
-    email: 'example@gmail.com',
+    title: 'Electrical wiring issues',
+    description: 'No electricity in the entire building',
+    category: 'Water',
+    priority: 'Medium',
+    status: 'Success',
   },
   {
     id: '489e1d42',
-    amount: 125,
-    status: 'processing',
-    email: 'example@gmail.com',
+    title: 'Low water pressure',
+    description: 'No Water Pressure',
+    category: 'Gas',
+    status: 'Processing',
+    priority: 'Low',
   },
   {
     id: '489e1d43',
-    amount: 125,
-    status: 'processing',
-    email: 'example@gmail.com',
+    title: 'Power Outage in Apartment',
+    description: 'No electricity in the entire building',
+    category: 'Heating and Cooling',
+    status: 'Failed',
+    priority: 'High',
   },
-  {
-    id: '489e1d44',
-    amount: 125,
-    status: 'processing',
-    email: 'example@gmail.com',
-  },
-  {
-    id: '489e1d45',
-    amount: 125,
-    status: 'processing',
-    email: 'example@gmail.com',
-  },
-  // ...
 ]

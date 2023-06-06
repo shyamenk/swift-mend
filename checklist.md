@@ -1,18 +1,18 @@
-- [ ] Make Wireframe
+- [x] Make Wireframe
 - [ ] Make Mockup
 - [x] Initialize Next JS Project, tailwind, typescript, eslint
 - [x] Setup AppWrite
 - [x] install React Query,react-form, zod, toastify
-- [ ] Make Logo, Tagline, Color Palette, Typography, FontSizes Rapid Solutions
+- [x] Make Logo, Tagline, Color Palette, Typography, FontSizes Rapid Solutions
       for Seamless Living
-- [ ] Build Site Header
-- [ ] Build Site Footer
-- [ ] Build Landing Page
-- [ ] Build Login Page
+- [x] Build Site Header
+- [x] Build Site Footer
+- [x] Build Landing Page
+- [x] Build Login Page
 - [ ] User Dashboard
-  - [ ] View Profile Information
-  - [ ] Update Profile Information
-  - [ ] Display Complaint Summary with Status
+  - [x] View Profile Information
+  - [x] Update Profile Information
+  - [x] Display Complaint Summary with Status
   - [ ] Modal for Individual Complaint
   - [ ] Track Summary
   - [ ] Provide Message Feature

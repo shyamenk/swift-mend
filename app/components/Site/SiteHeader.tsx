@@ -1,55 +1,24 @@
 'use client'
 
-import {Fragment, useEffect, useState} from 'react'
+import {Fragment} from 'react'
 import {Disclosure, Menu, Transition} from '@headlessui/react'
 import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
 import Link from 'next/link'
-import {account, logout} from '../../lib/appWriteConfig'
-import {toast} from 'react-hot-toast'
-import {useRouter} from 'next/navigation'
 import {IoHome} from 'react-icons/io5'
 import {BiUser} from 'react-icons/bi'
+import {useAuth} from '@/app/hooks/useAuth'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-type user = {
-  name: string
-  email: string
-  status: boolean
-}
-
 export default function SiteHeader() {
-  const [user, setUser] = useState<user>()
+  const {user, logout} = useAuth()
 
-  const [loading, setLoading] = useState(false)
-
-  const router = useRouter()
-
-  useEffect(() => {
-    setLoading(true)
-    const res = account.get()
-    res
-      .then(user => {
-        setUser(user)
-        setLoading(false)
-      })
-      .catch(error => {
-        if (error.name === '"AppwriteException"') {
-          toast.error('You are not logged in')
-        }
-      })
-  }, [])
+  // TODO:  Make the Necessary Changes to update the userState Magic Link
 
   const logOutHandler = async () => {
-    try {
-      await logout()
-      toast.success('Logout Succesfull')
-      router.push('/login')
-    } catch (error) {
-      toast.error('You are already Logged Out')
-    }
+    logout()
   }
 
   return (
@@ -105,7 +74,7 @@ export default function SiteHeader() {
                   />
                 </button>
 
-                {user?.name ? (
+                {user ? (
                   <Menu as="div" className="relative ml-3">
                     <div>
                       <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue-600 focus:ring-offset-2">

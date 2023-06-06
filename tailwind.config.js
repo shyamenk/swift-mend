@@ -7,10 +7,13 @@ module.exports = {
     './app/**/*.{ts,tsx}',
   ],
   theme: {
-    fontFamily: {
-      bruno: ['Bruno Ace SC'],
+    container: {
+      center: true,
+      padding: '2rem',
+      screens: {
+        '2xl': '1400px',
+      },
     },
-
     extend: {
       colors: {
         'brand-ribbon': {
