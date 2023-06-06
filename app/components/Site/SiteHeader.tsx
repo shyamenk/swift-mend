@@ -1,29 +1,29 @@
-'use client'
+'use client';
 
-import {Fragment} from 'react'
-import {Disclosure, Menu, Transition} from '@headlessui/react'
-import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
-import Link from 'next/link'
-import {IoHome} from 'react-icons/io5'
-import {BiUser} from 'react-icons/bi'
-import {useAuth} from '@/app/hooks/useAuth'
+import { Fragment } from 'react';
+import { Disclosure, Menu, Transition } from '@headlessui/react';
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import { IoHome } from 'react-icons/io5';
+import { BiUser } from 'react-icons/bi';
+import { useAuth } from '@hooks/useAuth';
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ');
 }
 
 export default function SiteHeader() {
-  const {user, logout} = useAuth()
+  const { user, logout } = useAuth();
 
   // TODO:  Make the Necessary Changes to update the userState Magic Link
 
   const logOutHandler = async () => {
-    logout()
-  }
+    logout();
+  };
 
   return (
     <Disclosure as="nav" className="bg-white shadow">
-      {({open}) => (
+      {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-20 justify-between">
@@ -93,7 +93,7 @@ export default function SiteHeader() {
                     >
                       <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <Menu.Item>
-                          {({active}) => (
+                          {({ active }) => (
                             <Link
                               href="/user-profile"
                               className={classNames(
@@ -106,7 +106,7 @@ export default function SiteHeader() {
                           )}
                         </Menu.Item>
                         <Menu.Item>
-                          {({active}) => (
+                          {({ active }) => (
                             <Link
                               href="#"
                               className={classNames(
@@ -119,7 +119,7 @@ export default function SiteHeader() {
                           )}
                         </Menu.Item>
                         <Menu.Item>
-                          {({active}) => (
+                          {({ active }) => (
                             <a
                               onClick={logOutHandler}
                               className={classNames(
@@ -232,5 +232,5 @@ export default function SiteHeader() {
         </>
       )}
     </Disclosure>
-  )
+  );
 }

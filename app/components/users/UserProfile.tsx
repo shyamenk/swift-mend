@@ -1,46 +1,46 @@
-'use client'
-import React, {useEffect, useState} from 'react'
+'use client';
+import React, { useEffect, useState } from 'react';
 
-import {FaUser} from 'react-icons/fa'
-import UserProfieUpdateModal from '../ui/modal'
-import {DataTable} from './complaints/data-table'
-import {columns} from './complaints/columns'
-import {payments} from '@/app/lib/data'
-import {account} from '@/app/lib/appWriteConfig'
+import { FaUser } from 'react-icons/fa';
+import UserProfieUpdateModal from '../ui/modal';
+import { columns } from './complaints/columns';
+import { payments } from '@lib/data';
+import { account } from '@lib/appWriteConfig';
+import { DataTable } from './complaints/data-table';
 
 type User = {
-  name: string
-  status?: boolean | undefined
-  email?: string | undefined
-  phone?: string | undefined
-  emailVerification?: boolean | undefined
-  phoneVerification?: boolean | undefined
-}
+  name: string;
+  status?: boolean | undefined;
+  email?: string | undefined;
+  phone?: string | undefined;
+  emailVerification?: boolean | undefined;
+  phoneVerification?: boolean | undefined;
+};
 
 const UserProfile = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [user, setUser] = useState<User | undefined>(undefined)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [user, setUser] = useState<User | undefined>(undefined);
 
   const UserProfileUpdate = () => {
-    setIsModalOpen(prevState => !prevState)
-  }
+    setIsModalOpen((prevState) => !prevState);
+  };
 
   useEffect(() => {
-    const promise = account.get()
+    const promise = account.get();
     promise.then(
       function (user) {
-        setUser(user)
+        setUser(user);
       },
       function (error) {
-        console.log(error)
+        console.log(error);
       },
-    )
-  }, [])
+    );
+  }, []);
 
   const handleUpdateName = (updatedName: string) => {
-    const updatedUser = {...user, name: updatedName}
-    setUser(updatedUser)
-  }
+    const updatedUser = { ...user, name: updatedName };
+    setUser(updatedUser);
+  };
 
   return (
     <section className="w-full sm:p-6 pb-18  ">
@@ -93,7 +93,7 @@ const UserProfile = () => {
         <DataTable columns={columns} data={payments} />
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default UserProfile
+export default UserProfile;

@@ -1,69 +1,69 @@
-'use client'
-import {Fragment, useState} from 'react'
-import {Dialog, Transition} from '@headlessui/react'
-import {CheckIcon} from '@heroicons/react/24/outline'
-import {Input} from './input'
-import {z, ZodError} from 'zod'
-import clsx from 'clsx'
-import {account} from '@/app/lib/appWriteConfig'
-import {toast} from 'react-hot-toast'
+'use client';
+import { Fragment, useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { CheckIcon } from '@heroicons/react/24/outline';
+import { Input } from './input';
+import { z, ZodError } from 'zod';
+import clsx from 'clsx';
+import { toast } from 'react-hot-toast';
+import { account } from '@lib/appWriteConfig';
 
 const schema = z.object({
   name: z.string().nonempty('Name is required'),
   phone: z.string().nonempty('Phone is required'),
-})
+});
 
 interface UserProfieUpdateModalProps {
-  setOpen: (isOpen: boolean) => void
-  open: boolean
-  handleUpdateName: (updatedName: string) => void
+  setOpen: (isOpen: boolean) => void;
+  open: boolean;
+  handleUpdateName: (updatedName: string) => void;
 }
 
-type FormData = z.infer<typeof schema>
+type FormData = z.infer<typeof schema>;
 
 export default function UserProfieUpdateModal({
   setOpen,
   open,
   handleUpdateName,
 }: UserProfieUpdateModalProps) {
-  const [errors, setErrors] = useState<ZodError<FormData> | null>(null)
-  const [formData, setFormData] = useState<FormData>({name: '', phone: ''})
+  const [errors, setErrors] = useState<ZodError<FormData> | null>(null);
+  const [formData, setFormData] = useState<FormData>({ name: '', phone: '' });
 
   const handleClose = () => {
-    setOpen(false)
-    setErrors(null)
-    setFormData({name: '', phone: ''})
-  }
+    setOpen(false);
+    setErrors(null);
+    setFormData({ name: '', phone: '' });
+  };
 
   const handleSubmit = async () => {
     try {
-      const validatedData = schema.parse(formData)
+      const validatedData = schema.parse(formData);
 
       if (validatedData.name) {
         try {
-          const response = await account.updateName(validatedData.name)
-          handleUpdateName(response.name)
-          toast.success(`Name changed to ${response.name}`)
+          const response = await account.updateName(validatedData.name);
+          handleUpdateName(response.name);
+          toast.success(`Name changed to ${response.name}`);
         } catch (error) {
-          console.log(error)
+          console.log(error);
           toast.error(
             'Unable to update. Something went wrong! Please retry after some time.',
-          )
+          );
         }
       }
 
-      handleClose()
+      handleClose();
     } catch (error) {
       if (error instanceof z.ZodError) {
-        setErrors(error)
+        setErrors(error);
       }
     }
-  }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = e.target
-    setFormData(prevData => ({...prevData, [name]: value}))
-  }
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -122,17 +122,19 @@ export default function UserProfieUpdateModal({
                       'w-full border-brand-blue-500 focus:border-brand-blue-500 focus:ring-brand-blue-500 rounded-md shadow-sm py-2 px-3',
                       {
                         'border-red-500 ring-red-500': errors?.issues?.find(
-                          issue => issue.path[0] === 'name',
+                          (issue) => issue.path[0] === 'name',
                         ),
                       },
                     )}
                     value={formData.name}
                     onChange={handleChange}
                   />
-                  {errors?.issues?.find(issue => issue.path[0] === 'name') && (
+                  {errors?.issues?.find(
+                    (issue) => issue.path[0] === 'name',
+                  ) && (
                     <p className="mt-2 text-sm text-red-500">
                       {
-                        errors.issues.find(issue => issue.path[0] === 'name')
+                        errors.issues.find((issue) => issue.path[0] === 'name')
                           ?.message
                       }
                     </p>
@@ -148,17 +150,19 @@ export default function UserProfieUpdateModal({
                       'w-full border-brand-blue-500 focus:border-brand-blue-500 focus:ring-brand-blue-500 rounded-md shadow-sm py-2 px-3',
                       {
                         'border-red-500 ring-red-500': errors?.issues?.find(
-                          issue => issue.path[0] === 'phone',
+                          (issue) => issue.path[0] === 'phone',
                         ),
                       },
                     )}
                     value={formData.phone}
                     onChange={handleChange}
                   />
-                  {errors?.issues?.find(issue => issue.path[0] === 'phone') && (
+                  {errors?.issues?.find(
+                    (issue) => issue.path[0] === 'phone',
+                  ) && (
                     <p className="mt-2 text-sm text-red-500">
                       {
-                        errors.issues.find(issue => issue.path[0] === 'phone')
+                        errors.issues.find((issue) => issue.path[0] === 'phone')
                           ?.message
                       }
                     </p>
@@ -186,5 +190,5 @@ export default function UserProfieUpdateModal({
         </div>
       </Dialog>
     </Transition.Root>
-  )
+  );
 }

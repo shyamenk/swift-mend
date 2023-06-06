@@ -1,5 +1,5 @@
-import {ColumnDef} from '@tanstack/react-table'
-import {Payment} from '@/app/lib/data'
+import { Payment } from '@lib/data';
+import { ColumnDef } from '@tanstack/react-table';
 
 export const columns: ColumnDef<Payment>[] = [
   {
@@ -25,25 +25,25 @@ export const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: 'status',
     header: () => <div className="text-center">Status</div>,
-    cell: ({row}) => {
-      const status = String(row.getValue('status'))
-      let chipColor = ''
+    cell: ({ row }) => {
+      const status = String(row.getValue('status'));
+      let chipColor = '';
       switch (status) {
         case 'Pending':
-          chipColor = 'green'
-          break
+          chipColor = 'green';
+          break;
         case 'Processing':
-          chipColor = 'blue'
-          break
+          chipColor = 'blue';
+          break;
         case 'Success':
-          chipColor = 'green'
-          break
+          chipColor = 'green';
+          break;
         case 'Failed':
-          chipColor = 'red'
-          break
+          chipColor = 'red';
+          break;
         default:
-          chipColor = 'gray'
-          break
+          chipColor = 'gray';
+          break;
       }
 
       return (
@@ -52,7 +52,7 @@ export const columns: ColumnDef<Payment>[] = [
         >
           {status}
         </div>
-      )
+      );
     },
   },
   // {
@@ -68,4 +68,4 @@ export const columns: ColumnDef<Payment>[] = [
   //     return <div className="text-right font-medium">{formatted}</div>
   //   },
   // },
-]
+];
