@@ -47,8 +47,6 @@ const UserProfile = () => {
         [Query.equal('userId', user?.$id)],
       );
 
-      console.log(response);
-
       const convertedComplaints: Complaint[] = response.documents.map(
         (document: any) => {
           const {

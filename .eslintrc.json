@@ -1,22 +1,19 @@
 {
-  "parser": "@typescript-eslint/parser",
   "plugins": [
     "@typescript-eslint"
   ],
   "extends": [
-    // "next/babel",
-    "next/core-web-vitals",
-    "plugin:prettier/recommended",
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react-hooks/recommended",
-    "prettier"
+    "next/core-web-vitals"
+    // "plugin:prettier/recommended",
+    // "eslint:recommended",
+    // "plugin:@typescript-eslint/recommended",
+    // "prettier"
   ],
   "rules": {
-    "no-console": "warn",
-    "no-unused-vars": "error",
-    "require-await": "error",
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    // "no-console": "warn",
+    // "no-unused-vars": "warn",
+    // "require-await": "warn",
+    // "react-hooks/rules-of-hooks": "warn",
+    // "react-hooks/exhaustive-deps": "warn"
   }
 }

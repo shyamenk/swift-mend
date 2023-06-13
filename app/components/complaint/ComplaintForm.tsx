@@ -107,7 +107,6 @@ const ComplaintForm = () => {
       toast.success('Complaint Successfully Registered..');
     } catch (error: any) {
       toast.error(error.message);
-      console.log(error);
     }
     setIsLoading(false);
   };

@@ -1,8 +1,4 @@
-import { FC } from 'react';
-
-interface pageProps {}
-
-const page: FC<pageProps> = ({}) => {
+const page = () => {
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-7xl py-16 px-4 sm:px-6 lg:py-24 lg:px-8">

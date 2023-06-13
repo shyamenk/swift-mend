@@ -1,12 +1,10 @@
 'use client';
 
-import { FC, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@hooks/useAuth';
 
-interface pageProps {}
-
-const page: FC<pageProps> = ({}) => {
+const page = () => {
   const searchParams = useSearchParams();
   const userId = searchParams.get('userId') || '';
   const secret = searchParams.get('secret') || '';
@@ -16,8 +14,6 @@ const page: FC<pageProps> = ({}) => {
   useEffect(() => {
     updateMagicVerification(userId, secret);
   }, [userId, secret]);
-
-  console.log('Hello');
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
