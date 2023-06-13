@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import React, { ChangeEvent, useState } from 'react';
 interface ImageUploadProps {
   onFileUpload: (file: File | undefined) => void;
@@ -43,10 +44,12 @@ const AvatarUpload: React.FC<ImageUploadProps> = ({ onFileUpload }) => {
 
         <label htmlFor="image" className="cursor-pointer">
           {selectedImage ? (
-            <img
+            <Image
               src={selectedImage}
               alt="Selected"
               className="rounded-full w-16 h-16 object-cover"
+              width={100}
+              height={100}
             />
           ) : (
             <div className="flex items-center justify-center rounded-full w-16 h-16 bg-gray-200">

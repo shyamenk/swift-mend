@@ -34,7 +34,7 @@ const Hero = () => {
               href="/"
               className="block py-2 px-4 text-center text-white font-medium bg-brand-blue-500 duration-150 hover:bg-brand-blue-600 active:bg-brand-blue-700 rounded-lg shadow-lg hover:shadow-none"
             >
-              Let's get started
+              Let&apos;s get started
             </Link>
             <Link
               href="#"

@@ -7,6 +7,7 @@ import { columns } from './complaints/columns';
 import { account, database } from '@lib/appWriteConfig';
 import { DataTable } from './complaints/data-table';
 import { Query } from 'appwrite';
+import Image from 'next/image';
 
 export type Complaint = {
   $id: string;
@@ -126,10 +127,12 @@ const UserProfile = () => {
         <fieldset className="grid grid-cols-5 gap-2 rounded-md p-6   bg-brand-blue-50">
           <div className="flex gap-4 col-span-full sm:col-span-2">
             {user?.imageUrl ? (
-              <img
+              <Image
                 src={user.imageUrl}
                 alt="User Profile"
                 className="w-12 h-14 rounded-full"
+                width={100}
+                height={100}
               />
             ) : (
               <FaUser className="w-12 h-14 text-brand-blue-400" />
