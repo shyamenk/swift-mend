@@ -89,7 +89,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const googleSignIn = async () => {
     try {
       setLoading(true);
-      account.createOAuth2Session('google', `/`, '/login');
+      account.createOAuth2Session(
+        'google',
+        `https://swift-mend.vercel.app/`,
+        'https://swift-mend.vercel.app//login',
+      );
     } catch (error: any) {
       const appwriteException = error as AppwriteException;
       console.error(appwriteException.message);
