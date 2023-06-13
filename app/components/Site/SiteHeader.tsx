@@ -1,8 +1,11 @@
 'use client';
 
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { GiHamburgerMenu } from 'react-icons/gi';
+import { AiOutlineClose } from 'react-icons/ai';
+import { BsBell } from 'react-icons/bs';
+
 import Link from 'next/link';
 import { IoHome } from 'react-icons/io5';
 import { BiUser } from 'react-icons/bi';
@@ -14,7 +17,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function SiteHeader() {
-  const { user, logout, loading } = useAuth();
+  const { user, logout } = useAuth();
 
   const logOutHandler = async () => {
     logout();
@@ -67,7 +70,7 @@ export default function SiteHeader() {
                   className="rounded-full bg-white p-1 text-brand-gray-400 hover:text-brand-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:ring-offset-2"
                 >
                   <span className="sr-only">View notifications</span>
-                  <BellIcon
+                  <BsBell
                     className="h-6 w-6 text-brand-gray-500"
                     aria-hidden="true"
                   />
@@ -142,9 +145,15 @@ export default function SiteHeader() {
                 <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-brand-gray-400 hover:bg-brand-gray-100 hover:text-brand-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-blue-500">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
-                    <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                    <AiOutlineClose
+                      className="block h-6 w-6"
+                      aria-hidden="true"
+                    />
                   ) : (
-                    <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                    <GiHamburgerMenu
+                      className="block h-6 w-6"
+                      aria-hidden="true"
+                    />
                   )}
                 </Disclosure.Button>
               </div>
@@ -196,7 +205,7 @@ export default function SiteHeader() {
                   className="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-brand-gray-400 hover:text-brand-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-blue-500 focus:ring-offset-2"
                 >
                   <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
+                  <BsBell className="h-6 w-6" aria-hidden="true" />
                 </button>
               </div>
               <div className="mt-3 space-y-1">

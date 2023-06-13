@@ -1,7 +1,7 @@
 'use client';
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { CheckIcon } from '@heroicons/react/24/outline';
+import { BsFillCheckCircleFill } from 'react-icons/bs';
 import { Input } from './input';
 import { z, ZodError } from 'zod';
 import clsx from 'clsx';
@@ -217,7 +217,7 @@ export default function UserProfieUpdateModal({
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md sm:p-6">
                 <div>
                   <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand-ribbon-200">
-                    <CheckIcon
+                    <BsFillCheckCircleFill
                       className="h-6 w-6 text-brand-ribbon-500"
                       aria-hidden="true"
                     />
