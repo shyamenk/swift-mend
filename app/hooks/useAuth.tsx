@@ -89,11 +89,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const googleSignIn = async () => {
     try {
       setLoading(true);
-      account.createOAuth2Session(
-        'google',
-        `http://localhost:3000/`,
-        'http://localhost:3000/login',
-      );
+      account.createOAuth2Session('google', `/`, '/login');
     } catch (error: any) {
       const appwriteException = error as AppwriteException;
       console.error(appwriteException.message);
