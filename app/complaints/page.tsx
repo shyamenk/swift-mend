@@ -1,10 +1,13 @@
 import ComplaintForm from '@components/complaint/ComplaintForm';
-import React from 'react';
+import React, { Suspense } from 'react';
+import Loading from './loading';
 
 const page = () => {
   return (
     <div>
-      <ComplaintForm />
+      <Suspense fallback={<Loading />}>
+        <ComplaintForm />
+      </Suspense>
     </div>
   );
 };

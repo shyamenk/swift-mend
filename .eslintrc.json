@@ -4,7 +4,7 @@
     "@typescript-eslint"
   ],
   "extends": [
-    "next/babel",
+    // "next/babel",
     "next/core-web-vitals",
     "plugin:prettier/recommended",
     "eslint:recommended",

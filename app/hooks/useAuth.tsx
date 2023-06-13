@@ -1,7 +1,7 @@
 'use client';
 
-import { account } from '../lib/appWriteConfig';
-import { AppwriteException, ID, Models } from 'appwrite';
+import { account, database, storage } from '../lib/appWriteConfig';
+import { AppwriteException, ID, Models, Query } from 'appwrite';
 import { useRouter } from 'next/navigation';
 import {
   useContext,
@@ -21,6 +21,13 @@ export interface AuthState {
   signup: (email: string, password: string, name: string) => Promise<void>;
   sendMagicLink: (email: string) => Promise<void>;
   updateMagicVerification: (userId: string, secret: string) => Promise<void>;
+  createProfile: (
+    userId: string,
+    name: string,
+    phone: string,
+    file?: File | undefined,
+    email?: string,
+  ) => Promise<void>;
   updateUserVerification: (userId: string, secret: string) => Promise<void>;
   googleSignIn: () => Promise<void>;
 }
@@ -36,6 +43,7 @@ const defaultState: AuthState = {
   updateMagicVerification: async () => {},
   updateUserVerification: async () => {},
   googleSignIn: async () => {},
+  createProfile: async () => {},
 };
 
 const authContext = createContext<AuthState>(defaultState);
@@ -53,6 +61,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const loadAccount = async () => {
     try {
+      setLoading(true);
       const loadedAccount = await account.get();
       setUser(loadedAccount);
     } catch (error) {
@@ -65,58 +74,137 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const login = async (email: string, password: string) => {
     try {
+      setLoading(true);
       await account.createEmailSession(email, password);
       await loadAccount();
       router.push('/');
     } catch (error: any) {
       const appwriteException = error as AppwriteException;
       toast.error(appwriteException.message);
+    } finally {
+      setLoading(false);
     }
   };
+
   const googleSignIn = async () => {
     try {
-      const session = await account.createOAuth2Session(
+      setLoading(true);
+      account.createOAuth2Session(
         'google',
-        'http://localhost:3000/',
+        `http://localhost:3000/`,
         'http://localhost:3000/login',
       );
-      console.log('from UseAuth', { session });
     } catch (error: any) {
       const appwriteException = error as AppwriteException;
       console.error(appwriteException.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const sendMagicLink = async (email: string) => {
     try {
+      setLoading(true);
       await account.createMagicURLSession(
         ID.unique(),
         email,
-        `${window.location.origin}/login`,
+        `${window.location.origin}/verify`,
       );
-
       toast.success('Please check your Inbox🚀');
     } catch (error: any) {
       const appwriteException = error as AppwriteException;
       console.error(appwriteException.message);
       toast.error(appwriteException.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createProfile = async (
+    userId: string,
+    name: string,
+    phone: string,
+    file?: File | undefined,
+    email?: string,
+  ) => {
+    try {
+      setLoading(true);
+
+      if (file) {
+        const uploadFileResponse = await storage.createFile(
+          '6480b5b17507dd43eb4d',
+          userId,
+          file,
+        );
+        const imageUrl = storage.getFilePreview(
+          '6480b5b17507dd43eb4d',
+          uploadFileResponse.$id,
+        );
+
+        const userData = await database.createDocument(
+          '647e2a8404871d451728',
+          '64804c178c72b22d2799',
+          'unique()',
+          {
+            userId,
+            name,
+            phone,
+            email,
+            imageUrl,
+          },
+        );
+        setUser(userData);
+      } else {
+        const userData = await database.createDocument(
+          '647e2a8404871d451728',
+          '64804c178c72b22d2799',
+          'unique()',
+          {
+            userId,
+            name,
+            phone,
+          },
+        );
+        setUser(userData);
+      }
+      toast.success(`Profile Created for ${name}`);
+      router.push('/');
+    } catch (error) {
+      toast.error('Profile Creation Failed');
+    } finally {
+      setLoading(false);
     }
   };
 
   const updateMagicVerification = async (userId: string, secret: string) => {
     try {
+      setLoading(true);
       await account.updateMagicURLSession(userId, secret);
-      toast.success('Successfully Verified');
-      router.push('/');
+
+      const profile = await database.listDocuments(
+        '647e2a8404871d451728',
+        '64804c178c72b22d2799',
+        [Query.equal('userId', userId)],
+      );
+
+      if (profile.total > 0 && profile.documents.length > 0) {
+        profile.documents[0];
+        router.push('/');
+      } else {
+        router.push(`/create-profile?userId=${userId}`);
+      }
     } catch (error: any) {
       const appwriteException = error as AppwriteException;
       console.error(appwriteException.message);
       toast.error(appwriteException.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const updateUserVerification = async (userId: string, secret: string) => {
     try {
+      setLoading(true);
       await account.updateVerification(userId, secret);
       toast.success('Successfully Verified');
       router.push('/');
@@ -124,11 +212,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const appwriteException = error as AppwriteException;
       console.error(appwriteException.message);
       toast.error(appwriteException.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const signup = async (email: string, password: string, name: string) => {
     try {
+      setLoading(true);
       const session = await account.create('unique()', email, password, name);
       setUser(session);
       await account.createEmailSession(email, password);
@@ -136,14 +227,23 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       router.push('/');
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const logout = async () => {
-    await account.deleteSession('current');
-    setUser(null);
-    toast.success('Logout Succesfull');
-    router.push('/login');
+    try {
+      setLoading(true);
+      await account.deleteSession('current');
+      setUser(null);
+      toast.success('Logout Succesfull');
+      router.push('/login');
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -163,6 +263,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         updateMagicVerification,
         updateUserVerification,
         googleSignIn,
+        createProfile,
       }}
     >
       {children}

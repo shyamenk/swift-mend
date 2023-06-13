@@ -6,9 +6,12 @@ import { Input } from './input';
 import { z, ZodError } from 'zod';
 import clsx from 'clsx';
 import { toast } from 'react-hot-toast';
-import { account } from '@lib/appWriteConfig';
+import { database, storage } from '@lib/appWriteConfig';
+import AvatarUpload from '@components/users/AvatarUpload';
+import { useAuth } from '@hooks/useAuth';
+import { Query } from 'appwrite';
 
-const schema = z.object({
+const profileShema = z.object({
   name: z.string().nonempty('Name is required'),
   phone: z.string().nonempty('Phone is required'),
 });
@@ -16,10 +19,10 @@ const schema = z.object({
 interface UserProfieUpdateModalProps {
   setOpen: (isOpen: boolean) => void;
   open: boolean;
-  handleUpdateName: (updatedName: string) => void;
+  handleUpdateName: (name: string, phone: string) => void;
 }
 
-type FormData = z.infer<typeof schema>;
+type FormData = z.infer<typeof profileShema>;
 
 export default function UserProfieUpdateModal({
   setOpen,
@@ -27,35 +30,155 @@ export default function UserProfieUpdateModal({
   handleUpdateName,
 }: UserProfieUpdateModalProps) {
   const [errors, setErrors] = useState<ZodError<FormData> | null>(null);
-  const [formData, setFormData] = useState<FormData>({ name: '', phone: '' });
+  const [formData, setFormData] = useState<FormData>({
+    name: '',
+    phone: '',
+  });
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
+  const { user } = useAuth();
+
+  const createProfile = async (
+    userId: string,
+    name: string,
+    phone: string,
+    imageUrl: string,
+  ) => {
+    const newProfile = await database.createDocument(
+      '647e2a8404871d451728',
+      '64804c178c72b22d2799',
+      'unique()',
+      {
+        userId,
+        name,
+        phone,
+        imageUrl,
+      },
+    );
+    handleUpdateName(newProfile?.name, newProfile?.phone);
+    toast.success(`Profile Created: ${newProfile?.name}`);
+  };
+
+  const updateProfile = async (
+    profileId: string,
+    name: string,
+    phone: string,
+    imageUrl: string | null,
+  ) => {
+    const profileData = { name, phone, imageUrl };
+    if (imageUrl) {
+      profileData.imageUrl = imageUrl;
+    }
+
+    const updatedProfile = await database.updateDocument(
+      '647e2a8404871d451728',
+      '64804c178c72b22d2799',
+      profileId,
+      profileData,
+    );
+
+    handleUpdateName(updatedProfile?.name, updatedProfile?.phone);
+    toast.success(`Profile Updated: ${updatedProfile?.name}`);
+  };
   const handleClose = () => {
     setOpen(false);
     setErrors(null);
     setFormData({ name: '', phone: '' });
   };
 
+  const handleFileUpload = (file: File | undefined) => {
+    setUploadedFile(file ?? null);
+  };
+
   const handleSubmit = async () => {
     try {
-      const validatedData = schema.parse(formData);
+      const validatedData = profileShema.parse(formData);
+      const profileQuery = [Query.equal('userId', user?.$id)];
+      const { documents } = await database.listDocuments(
+        '647e2a8404871d451728',
+        '64804c178c72b22d2799',
+        profileQuery,
+      );
 
-      if (validatedData.name) {
-        try {
-          const response = await account.updateName(validatedData.name);
-          handleUpdateName(response.name);
-          toast.success(`Name changed to ${response.name}`);
-        } catch (error) {
-          console.log(error);
-          toast.error(
-            'Unable to update. Something went wrong! Please retry after some time.',
+      if (documents.length > 0) {
+        const profileId = documents[0].$id;
+        if (uploadedFile) {
+          const existingFiles = await storage.getFile(
+            '6480b5b17507dd43eb4d',
+            user?.$id,
+          );
+
+          const existingImage = existingFiles.name === uploadedFile.name;
+
+          if (existingImage) {
+            return null;
+          } else {
+            const uploadFileResponse = await storage.createFile(
+              '6480b5b17507dd43eb4d',
+              user?.$id,
+              uploadedFile,
+            );
+            const imageUrl = storage
+              .getFilePreview('6480b5b17507dd43eb4d', uploadFileResponse.$id)
+              .toString();
+            await updateProfile(
+              profileId,
+              validatedData.name,
+              validatedData.phone,
+              imageUrl,
+            );
+          }
+        } else {
+          await updateProfile(
+            profileId,
+            validatedData.name,
+            validatedData.phone,
+            null,
+          );
+        }
+      } else {
+        if (uploadedFile) {
+          const existingFiles = await storage.getFile(
+            '6480b5b17507dd43eb4d',
+            user?.$id,
+          );
+
+          const existingImage = existingFiles.name === uploadedFile.name;
+
+          if (existingImage) {
+            return null;
+          } else {
+            const uploadFileResponse = await storage.createFile(
+              '6480b5b17507dd43eb4d',
+              user?.$id,
+              uploadedFile,
+            );
+            const imageUrl = storage
+              .getFilePreview('6480b5b17507dd43eb4d', uploadFileResponse.$id)
+              .toString();
+            await createProfile(
+              user?.$id,
+              validatedData.name,
+              validatedData.phone,
+              imageUrl,
+            );
+          }
+        } else {
+          await createProfile(
+            user?.$id,
+            validatedData.name,
+            validatedData.phone,
+            '',
           );
         }
       }
-
       handleClose();
     } catch (error) {
       if (error instanceof z.ZodError) {
         setErrors(error);
+        toast.error(
+          'Unable to update. Something went wrong! Please retry after some time.',
+        );
       }
     }
   };
@@ -64,6 +187,7 @@ export default function UserProfieUpdateModal({
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -114,6 +238,7 @@ export default function UserProfieUpdateModal({
                   </div>
                 </div>
                 <div className="mt-6">
+                  <AvatarUpload onFileUpload={handleFileUpload} />
                   <Input
                     type="text"
                     placeholder="Name"
@@ -168,6 +293,7 @@ export default function UserProfieUpdateModal({
                     </p>
                   )}
                 </div>
+
                 <div className="mt-5 sm:mt-6 flex gap-4">
                   <button
                     type="button"

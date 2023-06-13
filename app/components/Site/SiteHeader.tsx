@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
@@ -14,9 +14,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function SiteHeader() {
-  const { user, logout } = useAuth();
-
-  // TODO:  Make the Necessary Changes to update the userState Magic Link
+  const { user, logout, loading } = useAuth();
 
   const logOutHandler = async () => {
     logout();
@@ -50,13 +48,13 @@ export default function SiteHeader() {
                     Report
                   </NavLink>
                   <NavLink
-                    href="#"
+                    href="/profile"
                     className="inline-flex items-center  px-1 pt-1 text-lg font-medium text-brand-gray-500 hover:border-brand-gray-300 hover:text-brand-gray-700"
                   >
-                    Track
+                    Profile
                   </NavLink>
                   <NavLink
-                    href="#"
+                    href="/contact"
                     className="inline-flex items-center  px-1 pt-1 text-lg font-medium text-brand-gray-500 hover:border-brand-gray-300 hover:text-brand-gray-700"
                   >
                     Contact
@@ -156,7 +154,7 @@ export default function SiteHeader() {
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 pt-2 pb-3">
               <Link
-                href="#"
+                href="/"
                 className="block border-l-4 border-brand-blue-500 bg-brand-blue-50 py-2 pl-3 pr-4 text-base font-medium text-brand-blue-700"
               >
                 Home
@@ -168,14 +166,13 @@ export default function SiteHeader() {
                 Report
               </Link>
               <Link
-                // as="a"
-                href="#"
+                href="/profile"
                 className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-brand-gray-500 hover:border-brand-gray-300 hover:bg-brand-gray-50 hover:text-brand-gray-700"
               >
-                Track
+                Profile
               </Link>
               <Link
-                href="#"
+                href="/contact"
                 className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-brand-gray-500 hover:border-brand-gray-300 hover:bg-brand-gray-50 hover:text-brand-gray-700"
               >
                 Contact

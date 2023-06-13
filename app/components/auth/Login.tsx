@@ -2,20 +2,11 @@
 
 import Link from 'next/link';
 import React, { FormEvent, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@hooks/useAuth';
 
 const Login = () => {
   const [email, setEmail] = useState('');
-  const searchParams = useSearchParams();
-  const { googleSignIn, sendMagicLink, updateMagicVerification } = useAuth();
-
-  const userId = searchParams.get('userId') || '';
-  const secret = searchParams.get('secret') || '';
-
-  React.useEffect(() => {
-    updateMagicVerification(userId, secret);
-  }, [userId, secret]);
+  const { googleSignIn, sendMagicLink } = useAuth();
 
   const loginHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
