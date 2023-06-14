@@ -81,8 +81,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       setLoading(true)
       await account.createEmailSession(email, password)
-      await loadAccount()
-      toast.success('Redirecting to Admin ....')
+      toast.success('Redirecting to Admin Dashboard ....')
+      console.log(window.location.origin)
       router.push(`${window.location.origin}/admin`)
     } catch (error) {
       const appwriteException = error as AppwriteException
@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setLoading(true)
       await account.createEmailSession(email, password)
       await loadAccount()
-      router.push(`${window.location.origin}/`)
+      router.push(`${window.location.origin}/admin`)
     } catch (error) {
       const appwriteException = error as AppwriteException
       toast.error(appwriteException.message)

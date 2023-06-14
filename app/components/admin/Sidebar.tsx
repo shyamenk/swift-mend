@@ -96,7 +96,7 @@ export default function SideBar() {
                       </button>
                     </div>
                   </Transition.Child>
-                  <div className="h-0 flex-1 overflow-y-auto pt-5 pb-4">
+                  <div className="flex-1 overflow-y-auto pt-5 pb-4">
                     <div className="flex flex-shrink-0 items-center px-4">
                       <IoHome className="block h-8 w-auto lg:hidden text-brand-blue-500" />
                     </div>
@@ -138,15 +138,13 @@ export default function SideBar() {
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
-              <div className="w-14 flex-shrink-0">
-                {/* Force sidebar to shrink to fit close icon */}
-              </div>
+              <div className="w-14 flex-shrink-0"></div>
             </div>
           </Dialog>
         </Transition.Root>
 
         <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
-          <div className="flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-white">
+          <div className="flex min-h-0 flex-col border-r border-gray-200 bg-white">
             <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
               <div className="flex flex-shrink-0 items-center px-4">
                 <IoHome className=" h-8 w-auto  text-brand-blue-500" />

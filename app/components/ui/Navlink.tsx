@@ -10,8 +10,6 @@ interface Props {
 const NavLink = ({ href, className = '', children, ...props }: Props) => {
   const segment = useSelectedLayoutSegment()
 
-  console.log(segment)
-
   const isActive = segment === href.replace(/^\//, '')
 
   const isActiveClass = isActive

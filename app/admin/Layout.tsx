@@ -1,4 +1,5 @@
-import SideBar from '@components/admin/Sidebar'
+import Side from '@components/admin/Side'
+// import SideBar from '@components/admin/Sidebar'
 import { ReactNode } from 'react'
 
 type Props = {
@@ -9,7 +10,7 @@ const AdminLayout = ({ children }: Props) => {
   return (
     <section className="flex">
       <aside>
-        <SideBar />
+        <Side />
       </aside>
       <main>{children}</main>
     </section>
