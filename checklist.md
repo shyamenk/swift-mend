@@ -13,16 +13,16 @@
   - [x] View Profile Information
   - [x] Update Profile Information
   - [x] Display Complaint Summary with Status
-  - [ ] Modal for Individual Complaint
-  - [ ] Track Summary
+  - [x] Modal for Individual Complaint
+  - [x] Track Summary
   - [ ] Provide Message Feature
   - [ ] Provide Option to give feedback
 - [ ] Complaint Page
-  - [ ] Form for add complaints(type, fileupload)
-  - [ ] Form Validation
-  - [ ] Error Handling
-  - [ ] Confirmation Message after Submission
-  - [ ] Store complaint in Database with(UserId, Complaint ID)
+  - [x] Form for add complaints(type, fileupload)
+  - [x] Form Validation
+  - [x] Error Handling
+  - [x] Confirmation Message after Submission
+  - [x] Store complaint in Database with(UserId, Complaint ID)
 - [ ] Admin Dashboard
 
   - [ ] Complaint Overview(all complaints,type, status, user,Id)

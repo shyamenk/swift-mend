@@ -1,15 +1,15 @@
-'use client';
+'use client'
 
-import { Input } from '@components/ui/input';
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { database, storage } from '@lib/appWriteConfig';
-import { ID, Models, Query } from 'appwrite';
-import Loading from 'app/complaints/loading';
-import { toast } from 'react-hot-toast';
-import { useAuth } from '@hooks/useAuth';
+import { Input } from '@components/ui/input'
+import React, { ChangeEvent, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { database, storage } from '@lib/appWriteConfig'
+import { AppwriteException, ID, Models, Query } from 'appwrite'
+import Loading from 'app/complaints/loading'
+import { toast } from 'react-hot-toast'
+import { useAuth } from '@hooks/useAuth'
 
 const formSchema = z.object({
   title: z.string().nonempty({ message: 'Title is required' }),
@@ -17,15 +17,15 @@ const formSchema = z.object({
   category: z.string().nonempty({ message: 'Category is required' }),
   subCategory: z.string().nonempty({ message: 'Sub Category is required' }),
   file: z.any(),
-});
+})
 
-type FormSchemaType = z.infer<typeof formSchema>;
+type FormSchemaType = z.infer<typeof formSchema>
 const ComplaintForm = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [categories, setCategories] = useState<Models.Document[]>([]);
-  const [subcategories, setSubcategories] = useState<Models.Document[]>([]);
+  const [isLoading, setIsLoading] = useState(false)
+  const [categories, setCategories] = useState<Models.Document[]>([])
+  const [subcategories, setSubcategories] = useState<Models.Document[]>([])
 
-  const { user } = useAuth();
+  const { user } = useAuth()
 
   const {
     register,
@@ -33,62 +33,62 @@ const ComplaintForm = () => {
     formState: { errors, isSubmitting },
   } = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
-  });
+  })
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await database.listDocuments(
           '647e2a8404871d451728',
-          '647e2a8b7ebef5305d56',
-        );
+          '647e2a8b7ebef5305d56'
+        )
 
-        setCategories(response.documents);
+        setCategories(response.documents)
       } catch (error) {
-        console.error('Failed to fetch categories:', error);
+        console.error('Failed to fetch categories:', error)
       }
-    };
+    }
 
-    fetchCategories();
-  }, []);
+    fetchCategories()
+  }, [])
 
   const handleCategoryChange = async (
-    event: ChangeEvent<HTMLSelectElement>,
+    event: ChangeEvent<HTMLSelectElement>
   ) => {
-    const selectedCategoryId = event.target.value;
+    const selectedCategoryId = event.target.value
 
     try {
       const response = await database.listDocuments(
         '647e2a8404871d451728',
         '64882001bc60f7795f52',
-        [Query.equal('categoryId', selectedCategoryId)],
-      );
+        [Query.equal('categoryId', selectedCategoryId)]
+      )
 
       setSubcategories(
         response.documents.filter(
-          (subcategory) => subcategory.categoryId === selectedCategoryId,
-        ),
-      );
+          (subcategory) => subcategory.categoryId === selectedCategoryId
+        )
+      )
     } catch (error) {
-      console.error('Failed to fetch subcategories:', error);
+      console.error('Failed to fetch subcategories:', error)
     }
-  };
+  }
 
   const onSubmit = async (data: FormSchemaType) => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      let imageUrl = '';
+      let imageUrl = ''
 
       if (data.file && data.file.length > 0) {
         const file = await storage.createFile(
           '64856c3ddafff5bbe66f',
           ID.unique(),
-          data.file[0],
-        );
+          data.file[0]
+        )
 
         imageUrl = storage
           .getFilePreview('64856c3ddafff5bbe66f', file.$id)
-          .toString();
+          .toString()
       }
 
       await database.createDocument(
@@ -102,14 +102,16 @@ const ComplaintForm = () => {
           sub_category: data.subCategory,
           userId: user?.$id,
           imageURL: imageUrl || null,
-        },
-      );
-      toast.success('Complaint Successfully Registered..');
-    } catch (error: any) {
-      toast.error(error.message);
+        }
+      )
+      toast.success('Complaint Successfully Registered..')
+    } catch (error) {
+      const appwriteException = error as AppwriteException
+      console.error(appwriteException.message)
+      toast.error(appwriteException.message)
     }
-    setIsLoading(false);
-  };
+    setIsLoading(false)
+  }
 
   return (
     <>
@@ -305,7 +307,7 @@ const ComplaintForm = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default ComplaintForm;
+export default ComplaintForm

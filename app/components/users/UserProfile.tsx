@@ -1,55 +1,56 @@
-'use client';
-import React, { useEffect, useState } from 'react';
+'use client'
+import React, { useEffect, useState } from 'react'
 
-import { FaUser } from 'react-icons/fa';
-import UserProfieUpdateModal from '../ui/modal';
-import { columns } from './complaints/columns';
-import { account, database } from '@lib/appWriteConfig';
-import { DataTable } from './complaints/data-table';
-import { Query } from 'appwrite';
-import Image from 'next/image';
+import { FaUser } from 'react-icons/fa'
+import UserProfieUpdateModal from '../ui/modal'
+import { columns } from './complaints/columns'
+import { account, database } from '@lib/appWriteConfig'
+import { DataTable } from './complaints/data-table'
+import { Query } from 'appwrite'
+import Image from 'next/image'
 
 export type Complaint = {
-  $id: string;
-  category: string;
-  description: string;
-  imageURL: string;
-  sub_category: string;
-  status: string;
-  title: string;
-  userId: string;
-};
+  $id: string
+  category: string
+  description: string
+  imageURL: string
+  sub_category: string
+  status: string
+  title: string
+  userId: string
+}
 
 type User = {
-  name?: string;
-  phone?: string;
-  userId?: string | undefined;
-  complaints?: any[] | undefined;
-  imageUrl?: string | undefined;
-  email?: string | undefined;
-};
+  name?: string
+  phone?: string
+  userId?: string | undefined
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  complaints?: any[] | undefined
+  imageUrl?: string | undefined
+  email?: string | undefined
+}
 
 const UserProfile = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user, setUser] = useState<User | undefined>(undefined);
-  const [complaints, setComplaints] = useState<Complaint[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [user, setUser] = useState<User | undefined>(undefined)
+  const [complaints, setComplaints] = useState<Complaint[]>([])
 
   const UserProfileUpdate = () => {
-    setIsModalOpen((prevState) => !prevState);
-  };
+    setIsModalOpen((prevState) => !prevState)
+  }
 
   const fetchComplaints = async () => {
     try {
-      const user = await account.get();
+      const user = await account.get()
 
       const response = await database.listDocuments(
         '647e2a8404871d451728',
         '647e2af1b52050feb1a8',
-        [Query.equal('userId', user?.$id)],
-      );
+        [Query.equal('userId', user?.$id)]
+      )
 
       const convertedComplaints: Complaint[] = response.documents.map(
-        (document: any) => {
+        (document) => {
           const {
             $id,
             category,
@@ -59,7 +60,7 @@ const UserProfile = () => {
             title,
             status,
             userId,
-          } = document;
+          } = document
           return {
             $id,
             category,
@@ -69,56 +70,56 @@ const UserProfile = () => {
             title,
             status,
             userId,
-          };
-        },
-      );
-      setComplaints(convertedComplaints);
+          }
+        }
+      )
+      setComplaints(convertedComplaints)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
   const fetchUser = async () => {
     try {
-      const user = await account.get();
+      const user = await account.get()
       const profile = await database.listDocuments(
         '647e2a8404871d451728',
         '64804c178c72b22d2799',
-        [Query.equal('userId', user.$id)],
-      );
+        [Query.equal('userId', user.$id)]
+      )
       if (profile.total > 0 && profile.documents.length > 0) {
-        const userData = profile.documents[0] as User;
-        setUser(userData);
+        const userData = profile.documents[0] as User
+        setUser(userData)
       } else {
-        const { name, email, $id } = user;
+        const { name, email, $id } = user
         const newUserProfile: User = {
           name,
           email,
           userId: $id,
-        };
+        }
         await database.createDocument(
           '647e2a8404871d451728',
           '64804c178c72b22d2799',
           'unique()',
-          newUserProfile,
-        );
-        setUser(newUserProfile);
+          newUserProfile
+        )
+        setUser(newUserProfile)
       }
     } catch (error) {
-      console.log('Error:', error);
+      console.log('Error:', error)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchComplaints();
-    fetchUser();
-  }, []);
+    fetchComplaints()
+    fetchUser()
+  }, [])
 
   const handleUpdateName = (updatedName: string, phone: string) => {
     if (user) {
-      const updatedUser = { ...user, name: updatedName, phone: phone };
-      setUser(updatedUser);
+      const updatedUser = { ...user, name: updatedName, phone: phone }
+      setUser(updatedUser)
     }
-  };
+  }
 
   return (
     <section className="w-full sm:p-6 pb-18  ">
@@ -174,7 +175,7 @@ const UserProfile = () => {
         <DataTable<Complaint, string> columns={columns} data={complaints} />
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default UserProfile;
+export default UserProfile

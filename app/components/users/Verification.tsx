@@ -1,19 +1,19 @@
-'use client';
+'use client'
 
-import { useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { useAuth } from '@hooks/useAuth';
+import { useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { useAuth } from '@hooks/useAuth'
 
 const Verification = () => {
-  const searchParams = useSearchParams();
-  const userId = searchParams.get('userId') || '';
-  const secret = searchParams.get('secret') || '';
+  const searchParams = useSearchParams()
+  const userId = searchParams.get('userId') || ''
+  const secret = searchParams.get('secret') || ''
 
-  const { updateMagicVerification, loading } = useAuth();
+  const { updateMagicVerification, loading } = useAuth()
 
   useEffect(() => {
-    updateMagicVerification(userId, secret);
-  }, [userId, secret]);
+    updateMagicVerification(userId, secret)
+  }, [userId, secret, updateMagicVerification])
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
@@ -35,7 +35,7 @@ const Verification = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Verification;
+export default Verification

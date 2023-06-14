@@ -88,6 +88,7 @@ const Hero = () => {
             </g>
             <defs>
               <clipPath id="a">
+                z
                 <path fill="#fff" d="M0 0h190v32.454H0z" />
               </clipPath>
             </defs>

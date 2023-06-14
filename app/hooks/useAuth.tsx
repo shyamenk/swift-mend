@@ -1,35 +1,36 @@
-'use client';
+/* eslint-disable @typescript-eslint/no-empty-function */
+'use client'
 
-import { account, database, storage } from '../lib/appWriteConfig';
-import { AppwriteException, ID, Models, Query } from 'appwrite';
-import { useRouter } from 'next/navigation';
+import { account, database, storage } from '../lib/appWriteConfig'
+import { AppwriteException, ID, Models, Query } from 'appwrite'
+import { useRouter } from 'next/navigation'
 import {
   useContext,
   createContext,
   useEffect,
   useState,
   ReactNode,
-} from 'react';
-import { toast } from 'react-hot-toast';
+} from 'react'
+import { toast } from 'react-hot-toast'
 
 export interface AuthState {
-  user: Models.Preferences | null;
-  loading: boolean;
-  error: string | null;
-  logout: () => Promise<void>;
-  login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string, name: string) => Promise<void>;
-  sendMagicLink: (email: string) => Promise<void>;
-  updateMagicVerification: (userId: string, secret: string) => Promise<void>;
+  user: Models.Preferences | null
+  loading: boolean
+  error: string | null
+  logout: () => Promise<void>
+  login: (email: string, password: string) => Promise<void>
+  signup: (email: string, password: string, name: string) => Promise<void>
+  sendMagicLink: (email: string) => Promise<void>
+  updateMagicVerification: (userId: string, secret: string) => Promise<void>
   createProfile: (
     userId: string,
     name: string,
     phone: string,
     file?: File | undefined,
-    email?: string,
-  ) => Promise<void>;
-  updateUserVerification: (userId: string, secret: string) => Promise<void>;
-  googleSignIn: () => Promise<void>;
+    email?: string
+  ) => Promise<void>
+  updateUserVerification: (userId: string, secret: string) => Promise<void>
+  googleSignIn: () => Promise<void>
 }
 
 const defaultState: AuthState = {
@@ -44,102 +45,102 @@ const defaultState: AuthState = {
   updateUserVerification: async () => {},
   googleSignIn: async () => {},
   createProfile: async () => {},
-};
+}
 
-const authContext = createContext<AuthState>(defaultState);
+const authContext = createContext<AuthState>(defaultState)
 
 type AuthProviderProps = {
-  children: ReactNode;
-};
+  children: ReactNode
+}
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<Models.Preferences | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [user, setUser] = useState<Models.Preferences | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
-  const router = useRouter();
+  const router = useRouter()
 
   const loadAccount = async () => {
     try {
-      setLoading(true);
-      const loadedAccount = await account.get();
-      setUser(loadedAccount);
+      setLoading(true)
+      const loadedAccount = await account.get()
+      setUser(loadedAccount)
     } catch (error) {
-      console.error(error);
-      setError('failed to load user');
+      console.error(error)
+      setError('failed to load user')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const login = async (email: string, password: string) => {
     try {
-      setLoading(true);
-      await account.createEmailSession(email, password);
-      await loadAccount();
-      router.push('/');
-    } catch (error: any) {
-      const appwriteException = error as AppwriteException;
-      toast.error(appwriteException.message);
+      setLoading(true)
+      await account.createEmailSession(email, password)
+      await loadAccount()
+      router.push('https://swift-mend.vercel.app/')
+    } catch (error) {
+      const appwriteException = error as AppwriteException
+      toast.error(appwriteException.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const googleSignIn = async () => {
     try {
-      setLoading(true);
+      setLoading(true)
       account.createOAuth2Session(
         'google',
         `https://swift-mend.vercel.app/`,
-        'https://swift-mend.vercel.app//login',
-      );
-    } catch (error: any) {
-      const appwriteException = error as AppwriteException;
-      console.error(appwriteException.message);
+        'https://swift-mend.vercel.app//login'
+      )
+    } catch (error) {
+      const appwriteException = error as AppwriteException
+      console.error(appwriteException.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const sendMagicLink = async (email: string) => {
     try {
-      setLoading(true);
+      setLoading(true)
       await account.createMagicURLSession(
         ID.unique(),
         email,
-        `${window.location.origin}/verify`,
-      );
-      toast.success('Please check your Inbox🚀');
-    } catch (error: any) {
-      const appwriteException = error as AppwriteException;
-      console.error(appwriteException.message);
-      toast.error(appwriteException.message);
+        `${window.location.origin}/verify`
+      )
+      toast.success('Please check your Inbox🚀')
+    } catch (error) {
+      const appwriteException = error as AppwriteException
+      console.error(appwriteException.message)
+      toast.error(appwriteException.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const createProfile = async (
     userId: string,
     name: string,
     phone: string,
     file?: File | undefined,
-    email?: string,
+    email?: string
   ) => {
     try {
-      setLoading(true);
+      setLoading(true)
 
       if (file) {
         const uploadFileResponse = await storage.createFile(
           '6480b5b17507dd43eb4d',
           userId,
-          file,
-        );
+          file
+        )
         const imageUrl = storage.getFilePreview(
           '6480b5b17507dd43eb4d',
-          uploadFileResponse.$id,
-        );
+          uploadFileResponse.$id
+        )
 
         const userData = await database.createDocument(
           '647e2a8404871d451728',
@@ -151,9 +152,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             phone,
             email,
             imageUrl,
-          },
-        );
-        setUser(userData);
+          }
+        )
+        setUser(userData)
       } else {
         const userData = await database.createDocument(
           '647e2a8404871d451728',
@@ -163,92 +164,92 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             userId,
             name,
             phone,
-          },
-        );
-        setUser(userData);
+          }
+        )
+        setUser(userData)
       }
-      toast.success(`Profile Created for ${name}`);
-      router.push('/');
+      toast.success(`Profile Created for ${name}`)
+      router.push('/')
     } catch (error) {
-      toast.error('Profile Creation Failed');
+      toast.error('Profile Creation Failed')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const updateMagicVerification = async (userId: string, secret: string) => {
     try {
-      setLoading(true);
-      await account.updateMagicURLSession(userId, secret);
+      setLoading(true)
+      await account.updateMagicURLSession(userId, secret)
 
       const profile = await database.listDocuments(
         '647e2a8404871d451728',
         '64804c178c72b22d2799',
-        [Query.equal('userId', userId)],
-      );
+        [Query.equal('userId', userId)]
+      )
 
       if (profile.total > 0 && profile.documents.length > 0) {
-        profile.documents[0];
-        router.push('/');
+        profile.documents[0]
+        router.push('/')
       } else {
-        router.push(`/create-profile?userId=${userId}`);
+        router.push(`/create-profile?userId=${userId}`)
       }
-    } catch (error: any) {
-      const appwriteException = error as AppwriteException;
-      console.error(appwriteException.message);
-      toast.error(appwriteException.message);
+    } catch (error) {
+      const appwriteException = error as AppwriteException
+      console.error(appwriteException.message)
+      toast.error(appwriteException.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const updateUserVerification = async (userId: string, secret: string) => {
     try {
-      setLoading(true);
-      await account.updateVerification(userId, secret);
-      toast.success('Successfully Verified');
-      router.push('/');
-    } catch (error: any) {
-      const appwriteException = error as AppwriteException;
-      console.error(appwriteException.message);
-      toast.error(appwriteException.message);
+      setLoading(true)
+      await account.updateVerification(userId, secret)
+      toast.success('Successfully Verified')
+      router.push('/')
+    } catch (error) {
+      const appwriteException = error as AppwriteException
+      console.error(appwriteException.message)
+      toast.error(appwriteException.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const signup = async (email: string, password: string, name: string) => {
     try {
-      setLoading(true);
-      const session = await account.create('unique()', email, password, name);
-      setUser(session);
-      await account.createEmailSession(email, password);
-      toast.success('SignUp Completed!. Login to continue..');
-      router.push('/');
+      setLoading(true)
+      const session = await account.create('unique()', email, password, name)
+      setUser(session)
+      await account.createEmailSession(email, password)
+      toast.success('SignUp Completed!. Login to continue..')
+      router.push('/')
     } catch (error) {
-      console.error(error);
+      console.error(error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const logout = async () => {
     try {
-      setLoading(true);
-      await account.deleteSession('current');
-      setUser(null);
-      toast.success('Logout Succesfull');
-      router.push('/login');
+      setLoading(true)
+      await account.deleteSession('current')
+      setUser(null)
+      toast.success('Logout Succesfull')
+      router.push('/login')
     } catch (error) {
-      console.error(error);
+      console.error(error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    loadAccount();
-  }, []);
+    loadAccount()
+  }, [])
 
   return (
     <authContext.Provider
@@ -268,10 +269,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     >
       {children}
     </authContext.Provider>
-  );
-};
+  )
+}
 
 export const useAuth = () => {
-  const context = useContext<AuthState>(authContext);
-  return context;
-};
+  const context = useContext<AuthState>(authContext)
+  return context
+}
