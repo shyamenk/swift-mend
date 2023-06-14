@@ -5,10 +5,10 @@ import { AuthProvider } from './hooks/useAuth'
 import SiteHeader from '@components/Site/SiteHeader'
 import Footer from '@components/Site/Footer'
 
-export const metadata = {
-  title: 'Swift Mend',
-  description: 'Rapid Solutions for Seamless Living',
-}
+// export const metadata = {
+//   title: 'Swift Mend',
+//   description: 'Rapid Solutions for Seamless Living',
+// }
 
 export default function RootLayout({
   children,
