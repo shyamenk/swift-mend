@@ -8,11 +8,12 @@ import {
   Brush,
   Wrench,
 } from 'lucide-react'
+import Link from 'next/link'
 
 export function SidebarOne() {
   return (
     <aside className="flex h-screen w-64 flex-col overflow-y-auto border-r bg-white px-5 py-8">
-      <a href="#">
+      <Link href="#">
         <svg
           width="40"
           height="46"
@@ -25,9 +26,9 @@ export function SidebarOne() {
             fill="black"
           />
         </svg>
-      </a>
+      </Link>
       <div className="mt-6 flex flex-1 flex-col justify-between">
-        <nav className="-mx-3 space-y-6 ">
+        <div className="-mx-3 space-y-6 ">
           <div className="space-y-3 ">
             <label className="px-3 text-xs font-semibold uppercase text-gray-900">
               analytics
@@ -93,7 +94,7 @@ export function SidebarOne() {
               <span className="mx-2 text-sm font-medium">Setting</span>
             </a>
           </div>
-        </nav>
+        </div>
       </div>
     </aside>
   )
