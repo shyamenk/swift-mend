@@ -1,34 +1,39 @@
-'use client';
+'use client'
 
-import Link from 'next/link';
-import React, { FormEvent, useState } from 'react';
-import { useAuth } from '@hooks/useAuth';
+import Link from 'next/link'
+import React, { FormEvent, useState } from 'react'
+import { useAuth } from '@hooks/useAuth'
+import { toast } from 'react-hot-toast'
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const { googleSignIn, sendMagicLink } = useAuth();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const { googleSignIn, login } = useAuth()
 
   const loginHandler = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    sendMagicLink(email);
-  };
+    e.preventDefault()
+    if (!email && !password) {
+      toast.error('Please provide email and password!')
+    }
+    login(email, password)
+  }
 
   const googleLoginHandler = () => {
-    googleSignIn();
-  };
+    googleSignIn()
+  }
 
   return (
     <main className="w-full h-screen flex flex-col items-center justify-center px-4">
       <div className="max-w-sm w-full text-gray-600 space-y-8">
         <div className="text-center">
           <div className="mt-5 space-y-2">
-            <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">
-              Log in to your account
+            <h3 className="text-brand-gray-600 text-3xl font-bold sm:text-3xl">
+              Welcome Back!
             </h3>
           </div>
         </div>
         <form onSubmit={loginHandler}>
-          <div>
+          <div className="mb-2">
             <label className="font-medium">Email</label>
             <input
               onChange={(e) => setEmail(e.target.value)}
@@ -38,6 +43,17 @@ const Login = () => {
               className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-brand-blue-600 shadow-sm rounded-lg"
             />
           </div>
+          <div>
+            <label className="font-medium">Password</label>
+            <input
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              required
+              value={password}
+              className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-brand-blue-600 shadow-sm rounded-lg"
+            />
+          </div>
+
           <button
             type="submit"
             className="w-full mt-4 px-4 py-2 text-white font-medium bg-brand-blue-600 hover:bg-brand-blue-500 active:bg-brand-blue-600 rounded-lg duration-150"
@@ -89,17 +105,17 @@ const Login = () => {
             Continue with Google
           </button>
         </div>
-        <div className="text-center">
+        <div className="space-y-4 text-sm font-medium">
           <Link
-            href="#"
-            className="text-brand-blue-600 hover:text-brand-blue-500"
+            href="/magic-login"
+            className="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg hover:bg-gray-50 duration-150 active:bg-gray-100"
           >
-            Forgot password?
+            Continue with Magic Session
           </Link>
         </div>
       </div>
     </main>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login
