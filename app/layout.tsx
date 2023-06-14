@@ -3,7 +3,8 @@ import Footer from './components/Site/Footer'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from './hooks/useAuth'
-import AdminLayout from './AdminLayout'
+// import AdminLayout from './AdminLayout'
+import SiteHeader from '@components/Site/SiteHeader'
 // export const metadata = {
 //   title: 'Swift Mend',
 //   description: 'Rapid Solutions for Seamless Living',
@@ -18,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AuthProvider>
-          <AdminLayout />
+          <SiteHeader />
           {children}
           <Toaster />
           <Footer />
