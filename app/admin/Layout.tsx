@@ -1,19 +1,13 @@
-import SideBar from '@components/admin/Sidebar'
-import { ReactNode } from 'react'
+import AdminNav from '@components/admin/AdminNav'
+import React from 'react'
 
-type Props = {
-  children: ReactNode
-}
-
-const AdminLayout = ({ children }: Props) => {
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex h-screen">
-      <aside>
-        <SideBar />
-      </aside>
-      <main className="w-full px-4 ">{children}</main>
-    </div>
+    <>
+      <AdminNav />
+      {children}
+    </>
   )
 }
 
-export default AdminLayout
+export default DashboardLayout

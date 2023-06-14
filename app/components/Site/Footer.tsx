@@ -1,4 +1,4 @@
-import { IoHome } from 'react-icons/io5';
+import { IoHome } from 'react-icons/io5'
 export default function Footer() {
   return (
     <footer className="px-4 py-8 bg-brand-blue-100 z-40 ">
@@ -39,5 +39,5 @@ export default function Footer() {
         </ul>
       </div>
     </footer>
-  );
+  )
 }
