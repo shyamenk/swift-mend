@@ -1,9 +1,9 @@
-import SideBar from '@components/admin/Sidebar';
-import { ReactNode } from 'react';
+import SideBar from '@components/admin/Sidebar'
+import { ReactNode } from 'react'
 
 type Props = {
-  children: ReactNode;
-};
+  children: ReactNode
+}
 
 const AdminLayout = ({ children }: Props) => {
   return (
@@ -13,7 +13,7 @@ const AdminLayout = ({ children }: Props) => {
       </aside>
       <main>{children}</main>
     </section>
-  );
-};
+  )
+}
 
-export default AdminLayout;
+export default AdminLayout
