@@ -1,8 +1,10 @@
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from './hooks/useAuth'
-import AdminHeader from './AdminHeader'
-import AdminFooter from './AdminFooter'
+// import AdminHeader from './AdminHeader'
+// import AdminFooter from './AdminFooter'
+import SiteHeader from '@components/Site/SiteHeader'
+import Footer from '@components/Site/Footer'
 
 export const metadata = {
   title: 'Swift Mend',
@@ -18,10 +20,12 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AuthProvider>
-          <AdminHeader />
+          {/* <AdminHeader /> */}
+          <SiteHeader />
           {children}
           <Toaster />
-          <AdminFooter />
+          <Footer />
+          {/* <AdminFooter /> */}
         </AuthProvider>
       </body>
     </html>
