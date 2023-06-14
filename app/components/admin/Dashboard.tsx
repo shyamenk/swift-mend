@@ -32,7 +32,7 @@ const stats = [
 const Dashboard = async () => {
   return (
     <>
-      <div>
+      <div className="h-screen px-10 py-10">
         <h1 className="text-4xl text-brand-gray-500  font-bold pb-4 border-b mb-4 pt-10">
           Welcome Admin!
         </h1>

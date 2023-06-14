@@ -1,9 +1,9 @@
 'use client'
-import Footer from './components/Site/Footer'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from './hooks/useAuth'
-import AdminLayout from './AdminLayout'
+import AdminHeader from './AdminHeader'
+import AdminFooter from './AdminFooter'
 // export const metadata = {
 //   title: 'Swift Mend',
 //   description: 'Rapid Solutions for Seamless Living',
@@ -18,10 +18,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AuthProvider>
-          <AdminLayout />
+          <AdminHeader />
           {children}
           <Toaster />
-          <Footer />
+          <AdminFooter />
         </AuthProvider>
       </body>
     </html>
