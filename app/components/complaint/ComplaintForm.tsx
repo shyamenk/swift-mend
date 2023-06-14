@@ -10,6 +10,7 @@ import { AppwriteException, ID, Models, Query } from 'appwrite'
 import Loading from 'app/complaints/loading'
 import { toast } from 'react-hot-toast'
 import { useAuth } from '@hooks/useAuth'
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
   title: z.string().nonempty({ message: 'Title is required' }),
@@ -24,9 +25,10 @@ const ComplaintForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [categories, setCategories] = useState<Models.Document[]>([])
   const [subcategories, setSubcategories] = useState<Models.Document[]>([])
+  const [loading, setLoading] = useState(true)
 
   const { user } = useAuth()
-
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -36,6 +38,11 @@ const ComplaintForm = () => {
   })
 
   useEffect(() => {
+    if (!user) {
+      router.push('/login')
+    } else {
+      setLoading(false)
+    }
     const fetchCategories = async () => {
       try {
         const response = await database.listDocuments(
@@ -50,8 +57,12 @@ const ComplaintForm = () => {
     }
 
     fetchCategories()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  if (loading) {
+    return <Loading />
+  }
   const handleCategoryChange = async (
     event: ChangeEvent<HTMLSelectElement>
   ) => {

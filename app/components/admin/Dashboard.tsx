@@ -32,8 +32,8 @@ const stats = [
 const Dashboard = async () => {
   return (
     <>
-      <div className="h-screen px-20 py-10">
-        <h1 className="text-4xl text-brand-gray-500  font-bold pb-4 border-b mb-4 pt-10">
+      <div className="mx-auto md:px-20  px-6 py-4 max-w-7xl">
+        <h1 className="text-4xl text-brand-gray-500  font-bold pb-4 border-b mb-4 py-4">
           Welcome Admin!
         </h1>
         <h3 className="text-lg font-medium leading-6 text-gray-900">
