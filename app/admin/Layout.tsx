@@ -1,15 +1,12 @@
-import Footer from '@components/Site/Footer'
-import AdminNav from '@components/admin/AdminNav'
 import React from 'react'
 
-const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <>
-      <AdminNav />
-      {children}
-      <Footer />
-    </>
+    <section className="flex">
+      <aside>{/* <SideBar /> */}</aside>
+      <main>{children}</main>
+    </section>
   )
 }
 
-export default DashboardLayout
+export default Layout

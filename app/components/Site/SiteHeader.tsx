@@ -11,6 +11,7 @@ import { IoHome } from 'react-icons/io5'
 import { BiUser } from 'react-icons/bi'
 import { useAuth } from '@hooks/useAuth'
 import NavLink from '@components/ui/Navlink'
+import { useSelectedLayoutSegment } from 'next/navigation'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -22,6 +23,10 @@ export default function SiteHeader() {
   const logOutHandler = async () => {
     logout()
   }
+
+  const segment = useSelectedLayoutSegment()
+
+  const isAdmin = segment?.match('admin')
 
   return (
     <Disclosure as="nav" className="bg-white shadow">
@@ -38,18 +43,38 @@ export default function SiteHeader() {
                   </h2>
                 </Link>
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8 md:pl-14">
-                  <NavLink
-                    href="/"
-                    className="  inline-flex items-center px-1 pt-1 text-lg font-medium  text-brand-gray-500 hover:text-brand-blue-600"
-                  >
-                    Home
-                  </NavLink>
-                  <NavLink
-                    href="/complaints"
-                    className="inline-flex items-center px-1 pt-1 text-lg font-medium text-brand-gray-500 hover:border-brand-gray-300 hover:text-brand-gray-700"
-                  >
-                    Report
-                  </NavLink>
+                  {isAdmin ? (
+                    <NavLink
+                      href="/admin"
+                      className="  inline-flex items-center px-1 pt-1 text-lg font-medium  text-brand-gray-500 hover:text-brand-blue-600"
+                    >
+                      DashBoard
+                    </NavLink>
+                  ) : (
+                    <NavLink
+                      href="/"
+                      className="  inline-flex items-center px-1 pt-1 text-lg font-medium  text-brand-gray-500 hover:text-brand-blue-600"
+                    >
+                      Home
+                    </NavLink>
+                  )}
+
+                  {isAdmin ? (
+                    <NavLink
+                      href="/admin/complaint-management"
+                      className="inline-flex items-center px-1 pt-1 text-lg font-medium text-brand-gray-500 hover:border-brand-gray-300 hover:text-brand-gray-700"
+                    >
+                      Complaint Management
+                    </NavLink>
+                  ) : (
+                    <NavLink
+                      href="/complaints"
+                      className="inline-flex items-center px-1 pt-1 text-lg font-medium text-brand-gray-500 hover:border-brand-gray-300 hover:text-brand-gray-700"
+                    >
+                      Report
+                    </NavLink>
+                  )}
+
                   <NavLink
                     href="/profile"
                     className="inline-flex items-center  px-1 pt-1 text-lg font-medium text-brand-gray-500 hover:border-brand-gray-300 hover:text-brand-gray-700"
