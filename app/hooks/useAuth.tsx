@@ -82,7 +82,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setLoading(true)
       await account.createEmailSession(email, password)
       await loadAccount()
-      router.push('https://swift-mend.vercel.app/admin')
+      toast.success('Redirecting to Admin ....')
+      router.push(`${window.location.origin}/admin`)
     } catch (error) {
       const appwriteException = error as AppwriteException
       toast.error(appwriteException.message)
@@ -96,7 +97,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setLoading(true)
       await account.createEmailSession(email, password)
       await loadAccount()
-      router.push('https://swift-mend.vercel.app/')
+      router.push(`${window.location.origin}/`)
     } catch (error) {
       const appwriteException = error as AppwriteException
       toast.error(appwriteException.message)
@@ -110,8 +111,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setLoading(true)
       account.createOAuth2Session(
         'google',
-        `https://swift-mend.vercel.app/`,
-        'https://swift-mend.vercel.app//login'
+        `${window.location.origin}/`,
+        `${window.location.origin}/login`
       )
     } catch (error) {
       const appwriteException = error as AppwriteException
