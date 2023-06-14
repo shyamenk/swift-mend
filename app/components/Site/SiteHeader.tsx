@@ -1,27 +1,27 @@
-'use client';
+'use client'
 
-import { Fragment } from 'react';
-import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { GiHamburgerMenu } from 'react-icons/gi';
-import { AiOutlineClose } from 'react-icons/ai';
-import { BsBell } from 'react-icons/bs';
+import { Fragment } from 'react'
+import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { GiHamburgerMenu } from 'react-icons/gi'
+import { AiOutlineClose } from 'react-icons/ai'
+import { BsBell } from 'react-icons/bs'
 
-import Link from 'next/link';
-import { IoHome } from 'react-icons/io5';
-import { BiUser } from 'react-icons/bi';
-import { useAuth } from '@hooks/useAuth';
-import NavLink from '@components/ui/Navlink';
+import Link from 'next/link'
+import { IoHome } from 'react-icons/io5'
+import { BiUser } from 'react-icons/bi'
+import { useAuth } from '@hooks/useAuth'
+import NavLink from '@components/ui/Navlink'
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(' ')
 }
 
 export default function SiteHeader() {
-  const { user, logout } = useAuth();
+  const { user, logout } = useAuth()
 
   const logOutHandler = async () => {
-    logout();
-  };
+    logout()
+  }
 
   return (
     <Disclosure as="nav" className="bg-white shadow">
@@ -39,7 +39,7 @@ export default function SiteHeader() {
                 </Link>
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8 md:pl-14">
                   <NavLink
-                    href="#"
+                    href="/"
                     className="  inline-flex items-center px-1 pt-1 text-lg font-medium  text-brand-gray-500 hover:text-brand-blue-600"
                   >
                     Home
@@ -100,7 +100,7 @@ export default function SiteHeader() {
                               href="/user-profile"
                               className={classNames(
                                 active ? 'bg-brand-gray-100' : '',
-                                'block px-4 py-2 text-sm text-brand-gray-700',
+                                'block px-4 py-2 text-sm text-brand-gray-700'
                               )}
                             >
                               Your Profile
@@ -113,7 +113,7 @@ export default function SiteHeader() {
                               href="#"
                               className={classNames(
                                 active ? 'bg-brand-gray-100' : '',
-                                'block px-4 w-full py-2 text-sm text-brand-gray-700',
+                                'block px-4 w-full py-2 text-sm text-brand-gray-700'
                               )}
                             >
                               Settings
@@ -126,7 +126,7 @@ export default function SiteHeader() {
                               onClick={logOutHandler}
                               className={classNames(
                                 active ? 'bg-brand-gray-100' : '',
-                                'block px-4  py-2 text-sm text-brand-gray-700 cursor-pointer',
+                                'block px-4  py-2 text-sm text-brand-gray-700 cursor-pointer'
                               )}
                             >
                               Sign out
@@ -236,5 +236,5 @@ export default function SiteHeader() {
         </>
       )}
     </Disclosure>
-  );
+  )
 }

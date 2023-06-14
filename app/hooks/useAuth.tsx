@@ -19,6 +19,7 @@ export interface AuthState {
   error: string | null
   logout: () => Promise<void>
   login: (email: string, password: string) => Promise<void>
+  adminLogin: (email: string, password: string) => Promise<void>
   signup: (email: string, password: string, name: string) => Promise<void>
   sendMagicLink: (email: string) => Promise<void>
   updateMagicVerification: (userId: string, secret: string) => Promise<void>
@@ -40,6 +41,7 @@ const defaultState: AuthState = {
   logout: async () => {},
   signup: async () => {},
   login: async () => {},
+  adminLogin: async () => {},
   sendMagicLink: async () => {},
   updateMagicVerification: async () => {},
   updateUserVerification: async () => {},
@@ -68,6 +70,22 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     } catch (error) {
       console.error(error)
       setError('failed to load user')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const adminLogin = async (email: string, password: string) => {
+    console.log(email)
+
+    try {
+      setLoading(true)
+      await account.createEmailSession(email, password)
+      await loadAccount()
+      router.push('https://swift-mend.vercel.app/admin')
+    } catch (error) {
+      const appwriteException = error as AppwriteException
+      toast.error(appwriteException.message)
     } finally {
       setLoading(false)
     }
@@ -259,6 +277,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         error,
         logout,
         login,
+        adminLogin,
         signup,
         sendMagicLink,
         updateMagicVerification,

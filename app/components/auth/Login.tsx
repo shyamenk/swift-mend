@@ -8,10 +8,14 @@ import { toast } from 'react-hot-toast'
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const { googleSignIn, login } = useAuth()
+  const { googleSignIn, login, adminLogin } = useAuth()
 
   const loginHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    if (email === 'admin@swiftmend.com') {
+      adminLogin(email, password)
+    }
     if (!email && !password) {
       toast.error('Please provide email and password!')
     }

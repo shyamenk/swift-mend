@@ -1,6 +1,6 @@
-'use client';
-import { Fragment, useState } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
+'use client'
+import { Fragment, useState } from 'react'
+import { Dialog, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
   CalendarIcon,
@@ -10,10 +10,11 @@ import {
   InboxIcon,
   UsersIcon,
   XMarkIcon,
-} from '@heroicons/react/24/outline';
-import Image from 'next/image';
-import { IoHome } from 'react-icons/io5';
-import Link from 'next/link';
+} from '@heroicons/react/24/outline'
+import Image from 'next/image'
+import { IoHome } from 'react-icons/io5'
+import Link from 'next/link'
+import NavLink from '@components/ui/Navlink'
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: HomeIcon, current: true },
@@ -32,14 +33,13 @@ const navigation = [
   { name: 'Notification', href: '#', icon: CalendarIcon, current: false },
   { name: 'Analytics and Reports', href: '#', icon: InboxIcon, current: false },
   { name: 'Settings', href: '#', icon: ChartBarIcon, current: false },
-];
-
+]
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(' ')
 }
 
 export default function SideBar() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
     <>
@@ -100,29 +100,16 @@ export default function SideBar() {
                     <div className="flex flex-shrink-0 items-center px-4">
                       <IoHome className="block h-8 w-auto lg:hidden text-brand-blue-500" />
                     </div>
-                    <nav className="mt-5 space-y-1 px-2">
+                    <nav className="mt-5 flex-1 space-y-1 bg-white px-2">
                       {navigation.map((item) => (
-                        <Link
+                        <NavLink
                           key={item.name}
                           href={item.href}
-                          className={classNames(
-                            item.current
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                            'group flex items-center px-2 py-2 text-base font-medium rounded-md',
-                          )}
+                          className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                         >
-                          <item.icon
-                            className={classNames(
-                              item.current
-                                ? 'text-gray-500'
-                                : 'text-gray-400 group-hover:text-gray-500',
-                              'mr-4 flex-shrink-0 h-6 w-6',
-                            )}
-                            aria-hidden="true"
-                          />
+                          <item.icon className=" text-gray-500 mr-3 flex-shrink-0 h-6 w-6" />
                           {item.name}
-                        </Link>
+                        </NavLink>
                       ))}
                     </nav>
                   </div>
@@ -166,14 +153,14 @@ export default function SideBar() {
               </div>
               <nav className="mt-5 flex-1 space-y-1 bg-white px-2">
                 {navigation.map((item) => (
-                  <a
+                  <Link
                     key={item.name}
                     href={item.href}
                     className={classNames(
                       item.current
                         ? 'bg-gray-100 text-gray-900'
                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                      'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+                      'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
                     )}
                   >
                     <item.icon
@@ -181,12 +168,12 @@ export default function SideBar() {
                         item.current
                           ? 'text-gray-500'
                           : 'text-gray-400 group-hover:text-gray-500',
-                        'mr-3 flex-shrink-0 h-6 w-6',
+                        'mr-3 flex-shrink-0 h-6 w-6'
                       )}
                       aria-hidden="true"
                     />
                     {item.name}
-                  </a>
+                  </Link>
                 ))}
               </nav>
             </div>
@@ -229,5 +216,5 @@ export default function SideBar() {
         </div>
       </div>
     </>
-  );
+  )
 }
