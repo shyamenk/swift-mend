@@ -44,12 +44,12 @@ export default function SiteHeader() {
                 </Link>
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8 md:pl-14">
                   {isAdmin ? (
-                    <NavLink
+                    <Link
                       href="/admin"
                       className="  inline-flex items-center px-1 pt-1 text-lg font-medium  text-brand-gray-500 hover:text-brand-blue-600"
                     >
                       DashBoard
-                    </NavLink>
+                    </Link>
                   ) : (
                     <NavLink
                       href="/"
@@ -60,12 +60,12 @@ export default function SiteHeader() {
                   )}
 
                   {isAdmin ? (
-                    <NavLink
+                    <Link
                       href="/admin/complaint-management"
                       className="inline-flex items-center px-1 pt-1 text-lg font-medium text-brand-gray-500 hover:border-brand-gray-300 hover:text-brand-gray-700"
                     >
                       Complaint Management
-                    </NavLink>
+                    </Link>
                   ) : (
                     <NavLink
                       href="/complaints"
@@ -75,12 +75,22 @@ export default function SiteHeader() {
                     </NavLink>
                   )}
 
-                  <NavLink
-                    href="/profile"
-                    className="inline-flex items-center  px-1 pt-1 text-lg font-medium text-brand-gray-500 hover:border-brand-gray-300 hover:text-brand-gray-700"
-                  >
-                    Profile
-                  </NavLink>
+                  {isAdmin ? (
+                    <Link
+                      href="/profile"
+                      className="inline-flex items-center  px-1 pt-1 text-lg font-medium text-brand-gray-500 hover:border-brand-gray-300 hover:text-brand-gray-700"
+                    >
+                      Profile
+                    </Link>
+                  ) : (
+                    <NavLink
+                      href="/profile"
+                      className="inline-flex items-center  px-1 pt-1 text-lg font-medium text-brand-gray-500 hover:border-brand-gray-300 hover:text-brand-gray-700"
+                    >
+                      Profile
+                    </NavLink>
+                  )}
+
                   <NavLink
                     href="/contact"
                     className="inline-flex items-center  px-1 pt-1 text-lg font-medium text-brand-gray-500 hover:border-brand-gray-300 hover:text-brand-gray-700"
