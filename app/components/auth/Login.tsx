@@ -1,8 +1,8 @@
 'use client'
 
-import Link from 'next/link'
-import React, { FormEvent, useState } from 'react'
 import { useAuth } from '@hooks/useAuth'
+import Link from 'next/link'
+import { FormEvent, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
 const Login = () => {
